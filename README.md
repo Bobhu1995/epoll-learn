@@ -1,4 +1,4 @@
-# epool-learn
+# epoll-learn
 本仓库仅仅记录自己学习过程
 
 epoll
