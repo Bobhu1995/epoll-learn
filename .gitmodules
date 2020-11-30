@@ -1,0 +1,3 @@
+[submodule "epoll/test_epoll_lt_and_et"]
+	path = epoll/test_epoll_lt_and_et
+	url = https://github.com/Manistein/test_epoll_lt_and_et.git
