@@ -15,7 +15,7 @@ class ConnectFrame
 {
 public:
 	ConnectFrame();
-	~ConnectFrame();
+	virtual ~ConnectFrame() {}
 
 	int32_t init();
 	int32_t working();

@@ -19,10 +19,6 @@ namespace Server {
 
 	}
 
-	ConnectFrame::~ConnectFrame(){
-
-	}
-
 	int32_t ConnectFrame::init() {
 		if (FAIL == load_config()) {
 			return FAIL;
