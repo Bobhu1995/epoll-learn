@@ -3,7 +3,7 @@
 #include "ServerTypes.h"
 
 namespace Server{
-#define MAX_SOCKET_COUNT 1024
+#define MAX_SOCKET_COUNT 0xf000
 
 enum
 {

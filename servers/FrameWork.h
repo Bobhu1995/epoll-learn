@@ -20,8 +20,8 @@ public:
 	int32_t init();
 	int32_t working();
 private:
-	//ConnectFrame(const ConnectFrame& conn);
-	//ConnectFrame& operator = (const ConnectFrame& conn);
+	ConnectFrame(const ConnectFrame& conn) = delete;
+	ConnectFrame& operator = (const ConnectFrame& conn) = delete;
 	int32_t load_config();
 
 	int32_t recv_messages();
@@ -53,7 +53,7 @@ private:
 	struct epoll_event* epoll_ptr;
 	struct epoll_event epoll_events;
 
-	SockInfo socket_info[MAX_SOCKET_COUNT];
+	SockInfo socket_info[0xf000];
 	ServerConfig server_config;
 
 	char msg_buffer[0xfffff];

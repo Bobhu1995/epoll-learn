@@ -15,7 +15,7 @@
 
 
 namespace Server {
-	ConnectFrame::ConnectFrame():epoll_fd(-1), epoll_ptr(NULL){
+	ConnectFrame::ConnectFrame():epoll_fd(-1), epoll_ptr(nullptr){
 
 	}
 
@@ -29,7 +29,7 @@ namespace Server {
 			socket_info[i].sockfd = socket_fd_invalid;
 		}
 
-		epoll_ptr = NULL;
+		epoll_ptr = nullptr;
 		for (int32_t i = 0; i < server_config.open_port_count; ++i) {
 			open_epoll_socket(server_config.open_prots[i], &server_config.local_ip[0]);
 		}
@@ -55,17 +55,17 @@ namespace Server {
 	}
 
 	int32_t ConnectFrame::epoll_init(){
-		if (NULL != epoll_ptr) {
+		if (nullptr != epoll_ptr) {
 			return FAIL;
 		}
 
 		memset(&epoll_events, 0, sizeof(epoll_events));
 		epoll_events.events = EPOLLIN | EPOLLERR | EPOLLHUP;
-		epoll_events.data.ptr = NULL;
+		epoll_events.data.ptr = nullptr;
 		epoll_events.data.fd = -1;
 
-		epoll_ptr = (struct epoll_event*)malloc(MAX_SOCKET_COUNT * sizeof(struct epoll_event*));
-		if (NULL == epoll_ptr) {
+		epoll_ptr = static_cast<epoll_event*> (malloc(MAX_SOCKET_COUNT * sizeof(epoll_event*)));
+		if (nullptr == epoll_ptr) {
 			return FAIL;
 		}
 
@@ -209,11 +209,11 @@ namespace Server {
 
 		int sock_fd = socket_fd_invalid;
 		struct epoll_event* event_ptr = epoll_ptr;
-		SockInfo* current_socket_ptr = NULL;
+		SockInfo* current_socket_ptr = nullptr;
 
 		for (int i = 0; i < fd_event_count; ++i) {
 			sock_fd = event_ptr->data.fd;
-			if (sock_fd < 0 || sock_fd >(int)(sizeof(socket_info) / sizeof(socket_info[0]))) {
+			if (sock_fd < 0 || sock_fd > static_cast<int> ((sizeof(socket_info) / sizeof(socket_info[0])))) {
 				continue;
 			}
 
@@ -227,12 +227,12 @@ namespace Server {
 
 			int accepted_sockfd = socket_fd_invalid;
 			struct sockaddr_in socket_address;
-			socklen_t socket_address_len = (socklen_t)sizeof(socket_address);
+			socklen_t socket_address_len = static_cast<socklen_t> (sizeof(socket_address));
 
 			current_socket_ptr = &socket_info[sock_fd];
 			//¼àÌý¶Ë¿Ú
 			if (current_socket_ptr->socket_type == SOCKET_LISTEN) {
-				accepted_sockfd = accept(sock_fd, (struct sockaddr*) & socket_address, &socket_address_len);
+				accepted_sockfd = accept(sock_fd, (struct sockaddr*) &socket_address, &socket_address_len);
 				if (accepted_sockfd <= 0) {
 					continue;
 				}
@@ -277,24 +277,14 @@ namespace Server {
 			return FAIL;
 		}
 
-		int32_t buffer_size = (int32_t)sizeof(msg_buffer);
+		int32_t buffer_size = static_cast<int32_t> (sizeof(msg_buffer));
 		int32_t received = socket_recv(sock_fd, msg_buffer, buffer_size);
 		if (received <= 0) {
 			clear_socket(sock_fd, __FUNCTION__, __LINE__);
 			return FAIL;
 		}
-		//if (current_socket_ptr->is_sent_message == false) {
-		//	char* tmp = msg_buffer[0];
 
-		//	if (0 == *tmp) {
-		//		clear_socket(sock_fd);
-		//		return FAIL;
-		//	}
-
-		//	current_socket_ptr->is_sent_message =
-		//}
-
-		printf("%s, message is %s", __FUNCTION__, msg_buffer);
+		//printf("%s, message is %s.\n", __FUNCTION__, msg_buffer);
 		int32_t sent = socket_send(current_socket_ptr->sockfd, msg_buffer, received);
 		if (sent != received) {
 			return FAIL;
@@ -304,7 +294,7 @@ namespace Server {
 	}
 
 	int32_t ConnectFrame::socket_recv(int32_t fd, char* data, int32_t length) {
-		if (data == NULL || length < 0) {
+		if (data == nullptr || length < 0) {
 			return FAIL;
 		}
 
@@ -326,7 +316,7 @@ namespace Server {
 	}
 
 	int32_t ConnectFrame::socket_send(int32_t fd, char* data, int32_t length) {
-		if (data == NULL || length < 0) {
+		if (data == nullptr || length < 0) {
 			return FAIL;
 		}
 
